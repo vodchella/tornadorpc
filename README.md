@@ -228,6 +228,5 @@ to test the JSONRPC system, run the following:
 TODO
 ----
 * Add unit tests
-* Add logging mechanism
 * Add proper HTTP codes for failures
 * Optimize
