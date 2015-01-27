@@ -52,7 +52,7 @@ class XMLRPCParser(BaseRPCParser):
 
     def log_response(self, response_xml, is_error=False):
         if config.logger:
-            config.logger('response', response_xml, is_error, handler=self.handler)
+            config.logger('response', response_xml, is_error=is_error, handler=self.handler)
         return response_xml
 
     def parse_responses(self, responses):

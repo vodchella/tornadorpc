@@ -62,7 +62,7 @@ class JSONRPCParser(BaseRPCParser):
 
     def log_response(self, response_json, is_error=False):
         if config.logger:
-            config.logger('response', response_json, is_error, handler=self.handler)
+            config.logger('response', response_json, is_error=is_error, handler=self.handler)
         return response_json
 
     def parse_responses(self, responses):
