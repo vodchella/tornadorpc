@@ -154,17 +154,15 @@ class BaseRPCParser(object):
             basic_auth_ok = True
             auth_header = self.handler.request.headers.get('Authorization')
             if auth_header is None or not auth_header.startswith('Basic '):
-                # raise tornado.web.HTTPError(403)
                 basic_auth_ok = False
             else:
                 auth_decoded = base64.b64decode(auth_header[6:])
                 basicauth_user = auth_decoded.decode("utf-8").split(':')[0]
                 basicauth_pass = auth_decoded.decode("utf-8").split(':')[1]
                 if not config.basic_auth_callback(basicauth_user, basicauth_pass):
-                    # raise tornado.web.HTTPError(403)
                     basic_auth_ok = False
             if not basic_auth_ok:
-                return self.handler.result(self.faults.custom_error("HTTPError: HTTP 403: Forbidden"))
+                return self.handler.result(self.faults.http_error(403))
 
         try:
             response = method(*extra_args, **final_kwargs)
@@ -361,6 +359,9 @@ class Faults(object):
     def custom_error(self, errmsg):
         fault = self.fault(-32000, errmsg)
         return fault
+
+    def http_error(self, code):
+        return self.custom_error(str(tornado.web.HTTPError(code)))
 
 
 """
