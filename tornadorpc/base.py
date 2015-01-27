@@ -148,6 +148,24 @@ class BaseRPCParser(object):
             final_kwargs, extra_args = getcallargs(method, *args, **kwargs)
         except TypeError:
             return self.handler.result(self.faults.invalid_params())
+
+        # Check http authorization before method call
+        if config.basic_auth:
+            basic_auth_ok = True
+            auth_header = self.handler.request.headers.get('Authorization')
+            if auth_header is None or not auth_header.startswith('Basic '):
+                # raise tornado.web.HTTPError(403)
+                basic_auth_ok = False
+            else:
+                auth_decoded = base64.b64decode(auth_header[6:])
+                basicauth_user = auth_decoded.decode("utf-8").split(':')[0]
+                basicauth_pass = auth_decoded.decode("utf-8").split(':')[1]
+                if not config.basic_auth_callback(basicauth_user, basicauth_pass):
+                    # raise tornado.web.HTTPError(403)
+                    basic_auth_ok = False
+            if not basic_auth_ok:
+                return self.handler.result(self.faults.custom_error("HTTPError: HTTP 403: Forbidden"))
+
         try:
             response = method(*extra_args, **final_kwargs)
         except Exception:
@@ -175,15 +193,6 @@ class BaseRPCParser(object):
         if handler._requests > 0:
             return
 
-        if config.basic_auth:
-            auth_header = handler.request.headers.get('Authorization')
-            if auth_header is None or not auth_header.startswith('Basic '):
-                raise tornado.web.HTTPError(403)
-            auth_decoded = base64.b64decode(auth_header[6:])
-            basicauth_user = auth_decoded.decode("utf-8").split(':')[0]
-            basicauth_pass = auth_decoded.decode("utf-8").split(':')[1]
-            if not config.basic_auth_callback(basicauth_user, basicauth_pass):
-               raise tornado.web.HTTPError(403)
         # We are finished with requests, send response
         if handler._RPC_finished:
             # We've already sent the response
