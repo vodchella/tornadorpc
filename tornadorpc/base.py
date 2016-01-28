@@ -14,7 +14,7 @@ import tornado.ioloop
 import tornado.httpserver
 import types
 import traceback
-from tornadorpc.utils import getcallargs
+from utils import getcallargs
 import base64
 
 

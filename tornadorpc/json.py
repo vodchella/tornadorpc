@@ -26,7 +26,7 @@ From Python 2.6 on, simplejson is included in the standard
 distribution as the "json" module.
 """
 
-from tornadorpc.base import BaseRPCParser, BaseRPCHandler, config
+from base import BaseRPCParser, BaseRPCHandler, config
 import jsonrpclib
 from jsonrpclib.jsonrpc import isbatch, isnotification, Fault
 from jsonrpclib.jsonrpc import dumps, loads
