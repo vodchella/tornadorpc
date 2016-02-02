@@ -1,5 +1,10 @@
+import sys
+from os import path
+sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
+
+
 import json
-from tests.helpers import TestHandler
+from helpers import TestHandler
 from tornado.httpclient import AsyncHTTPClient
 from tornado.testing import AsyncHTTPTestCase
 import tornado.web

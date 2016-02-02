@@ -1,3 +1,8 @@
+import sys
+from os import path
+sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
+
+
 import threading
 import time
 from tornadorpc import start_server, private, async
