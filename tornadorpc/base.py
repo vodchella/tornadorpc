@@ -204,16 +204,19 @@ class BaseRPCParser(object):
         # Calling the async callback
         handler.on_result(response_text)
 
-    def traceback(self, method_name='REQUEST', params=[], id=None):
+    def traceback(self, method_name='', params=[], id=None):
         err_lines = traceback.format_exc().splitlines()
         last_line = err_lines[len(err_lines) - 1]
-        err_title = "METHOD: %s" % method_name
+        err_title = ""
+        if method_name:
+            err_title = "METHOD: %s" % method_name
         id_str = ""
         if id:
             id_str = "ID: %s, " % id
         if len(params) > 0:
             err_title = '%s, %sPARAMS: %s' % (err_title, id_str, repr(params))
-        err_lines = [err_title]+err_lines
+        if err_title:
+            err_lines = [err_title]+err_lines
         if len(err_lines) >= 7 and config.short_errors:
             # Minimum number of lines to see what happened
             # Plus title and separators
