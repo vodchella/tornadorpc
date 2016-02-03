@@ -1,3 +1,8 @@
+import sys
+from os import path
+sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
+
+
 from tests.helpers import TestHandler, RPCTests
 from tornadorpc.json import JSONRPCHandler
 import jsonrpclib
