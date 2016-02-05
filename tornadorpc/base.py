@@ -363,6 +363,10 @@ class Faults(object):
         fault = self.fault(-32000, errmsg)
         return fault
 
+    def custom_error_with_code(self, code, errmsg):
+        fault = self.fault(code, errmsg)
+        return fault
+
     def http_error(self, code):
         return self.custom_error(str(tornado.web.HTTPError(code)))
 
